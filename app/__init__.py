@@ -1,10 +1,9 @@
 from flask import Flask
+from .views import index
 
 def create_app(): 
   app = Flask(__name__)
 
-  @app.route('/')
-  def index():
-    return 'Hello Flask'
-  
+  app.register_blueprint(index.bp)
+
   return app
