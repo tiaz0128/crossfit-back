@@ -2,7 +2,7 @@ from app import db
 
 
 class Member(db.Model):
-    __tablename__ = 'member'
+    __tablename__ = 'members'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
