@@ -1,9 +1,23 @@
 from flask import Flask
-from .views import index
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+
+import config
+
+db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app(): 
   app = Flask(__name__)
+  app.config.from_object(config)
 
+  #ORM
+  db.init_app(app)
+  migrate.init_app(app, db)
+  from .models import Member, Test
+
+  # blueprint
+  from .views import index
   app.register_blueprint(index.bp)
 
   return app
