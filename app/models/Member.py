@@ -17,4 +17,4 @@ class Member(db.Model):
         self.info_y = 'Y'
 
     def __repr__(self):
-        return f"test {self.name} {self.name}"
+        return f"test {self.name} {self.phone} {self.age}"
