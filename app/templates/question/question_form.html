@@ -1,0 +1,36 @@
+<div class="container">
+  <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+  <form method="post" class="my-3">
+    {{ form.csrf_token }}
+    <div class="mb-3">
+      <label for="subject">제목</label>
+      <input type="text" class="form-control" id="subject">
+    </div>
+    <div class="mb-3">
+      <label for="content">내용</label>
+      <textarea class="form-control" id="content" rows="10"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">저장하기</button>
+  </form>
+</div>
+
+<script>
+  window.onload = () => {
+    document.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault()
+
+      const csrf_token = document.querySelector('#csrf_token').value
+      const subject = document.querySelector('#subject').value
+      const content = document.querySelector('#content').value
+
+      fetch('/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({ csrf_token, subject, content })
+      })
+    })
+  }
+
+</script>

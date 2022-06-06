@@ -3,7 +3,7 @@ from app import db
 
 
 class Menu(db.Model):
-    __tablename__ = 'menu'
+    __tablename__ = "menu"
 
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer)

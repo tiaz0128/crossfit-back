@@ -1,3 +1,3 @@
-from .Crossfit_box import Crossfit_box
+from .Box import Box
 from .Member import Member
 from .Menu import Menu

@@ -1,25 +1,29 @@
-from flask import Blueprint
-from app import db
-from app.models.Crossfit_box import Crossfit_box
-from app.models.Member import Member
+from flask import Blueprint, jsonify, request
 
-bp = Blueprint('index', __name__, url_prefix='/')
+# from app import csrf
+from app.forms.text import QuestionForm
+from werkzeug.datastructures import ImmutableMultiDict
+from flask_wtf.csrf import generate_csrf
 
 
-@bp.route('/')
+bp = Blueprint("index", __name__, url_prefix="/")
+
+
+@bp.route("/", methods=["GET"])
 def index():
-    return 'Hello Flask'
+    form = QuestionForm()
+    csrf_token = form.csrf_token._value()
+    return jsonify({"csrf_token": csrf_token})
 
 
-@bp.route('/boxInfo/')
-def box_info():
-    box = Crossfit_box.query.get(1)
-    print(box)
-    return {"boxName": box.name}
+# @bp.route("/", methods=["POST"])
+# def create():
+#     reg_json = request.get_json()
+#     form_input = ImmutableMultiDict(reg_json)
+#     form = QuestionForm(form_input, meta={"csrf": False})
 
+#     if request.method == "POST" and form.validate():
+#         print(form.subject, form.content)
+#         return {"res": "ok"}, 200
 
-@bp.route("/members/")
-def members():
-    members = db.session.query(Member).all()
-
-    return {"members": [m.get_member() for m in members]}
+#     return {"res": "false"}, 400
