@@ -1,21 +1,45 @@
-from flask import Blueprint, request
+from flask import request
+from flask_restx import Resource, fields, Namespace
 from app.models.Member import Member
-from app import db
+from app import api
 
-bp = Blueprint("members", __name__, url_prefix="/members")
-
-
-@bp.route("/")
-def members():
-    page = request.args.get("page", 1, type=int)
-
-    return Member.get_members(page), 200
+ns = Namespace("members", description="Members operations")
 
 
-@bp.route("/search", methods=["GET"])
-def get_filter_member():
-    filter = request.args.to_dict()
-    filter["age"] = request.args.getlist("age")
-    filter.setdefault("page", 1)
+member_model = api.model(
+    "Member",
+    {
+        "id": fields.String(),
+        "name": fields.String(),
+        "age": fields.Integer(),
+    },
+)
 
-    return Member.get_filter_members(filter)
+
+@ns.route("/")
+class Members(Resource):
+    @api.marshal_list_with(member_model, code=200, envelope="members")
+    def get(self):
+        page = request.args.get("page", 1, type=int)
+        return Member.get_members(page)
+
+    def post(self):
+        pass
+
+
+@ns.route("/<string:id>")
+@ns.param("id", "The task identifier")
+class Member_(Resource):
+    def get(self, id):
+        return Member.get_member(id)
+
+
+@ns.route("/search")
+class MemberSearch(Resource):
+    def get(self):
+        print(request.args.to_dict())
+        filter = request.args.to_dict()
+        filter["age"] = request.args.getlist("age")
+        filter["page"] = int(filter.setdefault("page", 1))
+
+        return Member.get_filter_members(filter)

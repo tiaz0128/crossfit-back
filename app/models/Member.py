@@ -50,16 +50,16 @@ class Member(db.Model):
         members = Member.query.order_by(Member.id)
         members = members.paginate(page, per_page=10)
 
-        schema = MemberSchema(only=("name", "age"), many=True)
+        schema = MemberSchema(only=("id", "name", "age"), many=True)
         result = schema.dump(members.items)
 
-        return {"members": result}
+        return result
 
     def get_filter_members(filter):
         q = Member.query
 
         if filter.get("name"):
-            q = Member.query.filter_by(name=filter["name"])
+            q = q.filter_by(name=filter["name"])
         if filter.get("age"):
             q = q.filter(Member.age.in_(filter["age"]))
 

@@ -1,35 +1,32 @@
-from datetime import datetime
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_restx import Api
 
-# from flask_wtf.csrf import CSRFProtect
+from app.config import DevConfig
 
-import config
 
 db = SQLAlchemy()
 migrate = Migrate()
-# csrf = CSRFProtect()
+api = Api(doc="/docs")
 
 
 def create_app():
     app = Flask(__name__)
+
     CORS(app)
-    # csrf.init_app(app)
-    app.config.from_object(config)
+    app.config.from_object(DevConfig)
 
     # ORM
     db.init_app(app)
     migrate.init_app(app, db)
     from . import models
 
-    # blueprint
-    from .views import index, box, members, member
+    # DOC
+    api.init_app(app)
+    from .views.members import ns
 
-    app.register_blueprint(index.bp)
-    app.register_blueprint(box.bp)
-    app.register_blueprint(members.bp)
-    app.register_blueprint(member.bp)
+    api.add_namespace(ns, "/members")
 
     return app

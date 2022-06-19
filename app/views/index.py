@@ -1,19 +1,11 @@
-from flask import Blueprint, jsonify, request
+# from flask import Blueprint, jsonify
 
-# from app import csrf
-from app.forms.text import QuestionForm
-from werkzeug.datastructures import ImmutableMultiDict
-from flask_wtf.csrf import generate_csrf
+# bp = Blueprint("index", __name__, url_prefix="/")
 
 
-bp = Blueprint("index", __name__, url_prefix="/")
-
-
-@bp.route("/", methods=["GET"])
-def index():
-    form = QuestionForm()
-    csrf_token = form.csrf_token._value()
-    return jsonify({"csrf_token": csrf_token})
+# @bp.route("/", methods=["GET"])
+# def index():
+#     return jsonify({"csrf_token": "test"})
 
 
 # @bp.route("/", methods=["POST"])
